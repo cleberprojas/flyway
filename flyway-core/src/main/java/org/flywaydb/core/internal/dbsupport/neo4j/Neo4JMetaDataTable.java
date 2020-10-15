@@ -315,5 +315,5 @@ public class Neo4JMetaDataTable implements MetaDataTable {
 					"Error while retrieving the list of applied migrations from metadata table " + table, e);
 		}
 	}
-
+	
 }

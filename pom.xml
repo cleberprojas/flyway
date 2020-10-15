@@ -146,7 +146,8 @@
         <version.equinoxcommon>3.6.0.v20100503</version.equinoxcommon>
         <version.android>4.0.1.2</version.android>
         <version.slf4j>1.7.16</version.slf4j>
-        <version.jre>8.74</version.jre>
+        <!-- <version.jre>8.74</version.jre> -->
+        <version.jre>11.0.2</version.jre>
         <version.testcontainers>1.4.2</version.testcontainers>
     </properties>
 
@@ -526,7 +527,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>2.3.7</version>
+                    <version>2.5.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -574,13 +575,14 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>animal-sniffer-maven-plugin</artifactId>
-                <version>1.14</version>
+                <version>1.16</version>
                 <configuration>
                     <signature>
-                        <groupId>org.codehaus.mojo.signature</groupId>
-                        <artifactId>java16</artifactId>
-                        <version>1.1</version>
+                         <groupId>org.codehaus.mojo.signature</groupId>
+				            <artifactId>java18</artifactId>
+				            <version>1.0</version>
                     </signature>
+                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -813,5 +815,5 @@
             </build>
         </profile>
     </profiles>
-    <version>0-SNAPSHOT</version>
+    <version>9.0-scutera-test</version>
 </project>

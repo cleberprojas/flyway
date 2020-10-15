@@ -62,25 +62,48 @@ public class Neo4JSchema extends Schema<DbSupport> {
 
 	@Override
 	protected void doClean() throws SQLException {
+	    cleanNodes();
+	    cleanConstraints();
+	    cleanIndexes();
+	}
+
+    private void cleanNodes() {
         new TransactionTemplate(jdbcTemplate.getConnection()).execute(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LOG.info("Dropping existing nodes...");
-                jdbcTemplate.queryForString("MATCH (n) DETACH DELETE n");
-                return null;
-            }
-        });
-		new TransactionTemplate(jdbcTemplate.getConnection()).execute(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                List<String> constraints = jdbcTemplate.queryForStringList("CALL db.constraints");
-                for (String constraint : constraints) {
-                    LOG.info("Dropping existing constraint: " + constraint);
-                    jdbcTemplate.executeStatement(String.format("DROP %s", constraint));
-                }
-                return null;
-            }
-        });
+	        @Override
+	        public Void call() throws Exception {
+	            LOG.info("Dropping existing nodes...");
+	            jdbcTemplate.queryForString("MATCH (n) DETACH DELETE n");
+	            return null;
+	        }
+	    });
+    }
+
+	private void cleanIndexes() throws SQLException {
+	    new TransactionTemplate(jdbcTemplate.getConnection()).execute(new Callable<Void>() {
+	        @Override
+	        public Void call() throws Exception {
+	            List<String> indexes = jdbcTemplate.queryForStringList("CALL db.indexes() yield name return name");
+	            for (String index : indexes) {
+	                LOG.info("Dropping existing index: " + index);
+	                jdbcTemplate.executeStatement(String.format("DROP INDEX %s", index));
+	            }
+	            return null;
+	        }
+	    });
+	}
+	
+	private void cleanConstraints() throws SQLException {
+	    new TransactionTemplate(jdbcTemplate.getConnection()).execute(new Callable<Void>() {
+	        @Override
+	        public Void call() throws Exception {
+	            List<String> constraints = jdbcTemplate.queryForStringList("CALL db.constraints");
+	            for (String constraint : constraints) {
+	                LOG.info("Dropping existing constraint: " + constraint);
+	                jdbcTemplate.executeStatement(String.format("DROP CONSTRAINT %s", constraint));
+	            }
+	            return null;
+	        }
+	    });
 	}
 
 	@Override

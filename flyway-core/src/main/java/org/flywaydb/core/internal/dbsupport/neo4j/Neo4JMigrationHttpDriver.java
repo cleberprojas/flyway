@@ -34,7 +34,7 @@ public class Neo4JMigrationHttpDriver extends BoltDriver {
     @Override
     public Connection connect(String url, Properties info) throws SQLException {
         Connection connection = super.connect(url, info);
-        return Neo4JConnectionEnhancer.enhancedConnection(connection, url, info);
+        return Neo4JConnectionEnhancer.enhancedConnection(null, connection, url, info);
     }
 
 }

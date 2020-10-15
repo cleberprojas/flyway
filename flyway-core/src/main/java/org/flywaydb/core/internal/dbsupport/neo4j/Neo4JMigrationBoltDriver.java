@@ -19,13 +19,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.neo4j.jdbc.bolt.BoltDriver;
 
 /**
  * @author Felipe Nascimento (ScuteraTech)
  *
  */
-public class Neo4JMigrationBoltDriver extends BoltDriver {
+public class Neo4JMigrationBoltDriver extends  Neo4JMigrationDriver {
 
 	public Neo4JMigrationBoltDriver() throws SQLException {
 		super();
@@ -34,7 +33,7 @@ public class Neo4JMigrationBoltDriver extends BoltDriver {
 	@Override
 	public Connection connect(String url, Properties info) throws SQLException {
 		Connection connection = super.connect(url, info);
-        return Neo4JConnectionEnhancer.enhancedConnection(connection, url, info);
+		return Neo4JConnectionEnhancer.enhancedConnection(this.getDriver(),connection, url, info);
 	}
 
 }

@@ -275,7 +275,11 @@ public class JdbcTemplate {
             statement.setEscapeProcessing(false);
             boolean hasResults = false;
             try {
+                if(!connection.getAutoCommit()) {
+                    connection.commit();
+                }
                 hasResults = statement.execute(sql);
+                
             } finally {
                 @SuppressWarnings("ThrowableResultOfMethodCallIgnored") SQLWarning warning = statement.getWarnings();
                 while (warning != null) {
@@ -287,7 +291,7 @@ public class JdbcTemplate {
                     }
                     warning = warning.getNextWarning();
                 }
-                // retrieve all results to ensure all errors are detected
+//                 retrieve all results to ensure all errors are detected
                 int updateCount = -1;
                 while (hasResults || (updateCount = statement.getUpdateCount()) != -1) {
                     if (updateCount != -1) {
@@ -300,7 +304,7 @@ public class JdbcTemplate {
             JdbcUtils.closeStatement(statement);
         }
     }
-
+    
     /**
      * Executes this update sql statement.
      *
